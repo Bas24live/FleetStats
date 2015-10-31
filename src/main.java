@@ -10,13 +10,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 
 public class main extends Application {
-    TextField txtFileURL;
-    TextArea txtAreaInfo;
-    Button btnOpen;
-    final FileChooser fc  = new FileChooser();
+    private TextField txtFileURL;
+    private TextArea txtAreaInfo;
+    private Button btnOpen, btnProcess;
 
+    private final FileChooser fc  = new FileChooser();
+    private File file;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,6 +37,7 @@ public class main extends Application {
 
     private void connectToUI(Scene scene){
         btnOpen = (Button)scene.lookup("#btnOpen");
+        btnProcess = (Button)scene.lookup("#btnProcess");
         txtFileURL = (TextField)scene.lookup("#txtFileURL");
         txtAreaInfo = (TextArea)scene.lookup("#txtAreaInfo");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
@@ -41,8 +45,24 @@ public class main extends Application {
         btnOpen.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                fc.showOpenDialog(scene.getWindow());
+                file = fc.showOpenDialog(scene.getWindow());
             }
         });
+
+        btnProcess.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                processFile();
+            }
+        });
+    }
+
+    private void processFile() {
+        if (file == null) {
+            txtAreaInfo.appendText("No File was selected\n");
+        }
+        else
+            txtAreaInfo.appendText("Selected: " + file.getName() + "\n");
+
     }
 }

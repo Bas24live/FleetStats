@@ -9,13 +9,8 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="btnOpen" layoutY="374.0" mnemonicParsing="false" text="Open" />
-      <ProgressBar fx:id="prgsbar" focusTraversable="false" layoutY="59.0" opacity="0.5" prefHeight="19.0" prefWidth="600.0" progress="0.0" />
       <TextField fx:id="txtFileURL" layoutX="46.0" layoutY="374.0" prefHeight="25.0" prefWidth="554.0" />
-      <Label focusTraversable="false" layoutX="266.0" layoutY="25.0" text="Progress">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <TextArea fx:id="txtAreaInfo" editable="false" layoutY="80.0" prefHeight="293.0" prefWidth="600.0" />
+      <TextArea fx:id="txtAreaInfo" editable="false" focusTraversable="false" layoutY="41.0" prefHeight="330.0" prefWidth="600.0" />
+      <Button fx:id="btnProcess" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="600.0" text="Process File" />
    </children>
 </Pane>
