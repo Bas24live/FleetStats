@@ -23,14 +23,12 @@ public class InstanceType {
 
 
     private void calcHosts(Host host) {
-
         int slotCount = host.getSlotCount();
 
         if (host.getEmptySlots() == slotCount)
             ++empHostCount;
         else if (host.getFullSlots() ==  slotCount)
             ++fullHostCount;
-
     }
 
     /////////////////////////////////////////////////////Getters////////////////////////////////////////////////////////
