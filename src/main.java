@@ -10,16 +10,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 
 public class main extends Application {
     TextField txtFileURL;
     TextArea txtAreaInfo;
     Button btnOpen;
-    final JFileChooser fc  = new JFileChooser();
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("txt");
+    final FileChooser fc  = new FileChooser();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -29,7 +26,6 @@ public class main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("layout.fxml"));
         Scene scene = new Scene(root);
-        fc.setFileFilter(filter);
         connectToUI(scene);
 
         primaryStage.setScene(scene);
@@ -40,11 +36,12 @@ public class main extends Application {
         btnOpen = (Button)scene.lookup("#btnOpen");
         txtFileURL = (TextField)scene.lookup("#txtFileURL");
         txtAreaInfo = (TextArea)scene.lookup("#txtAreaInfo");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
         btnOpen.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                fc.showOpenDialog(scene);
+                fc.showOpenDialog(scene.getWindow());
             }
         });
     }
