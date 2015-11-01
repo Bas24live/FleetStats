@@ -132,7 +132,7 @@ public class main extends Application {
                             }
                             txtAreaInfo.appendText("Added host " + host.getId() + " to instance type " + hostInstanceType + " data structure.\n");
                         } else
-                            txtAreaInfo.appendText("Host " + host.getId() + " data corrupt, host has been rejected.\n");
+                            txtAreaInfo.appendText("Hosts data corrupt, host has been rejected.\n");
                     }
                 }
                 lblStatus.setText("File can now saved.");
@@ -159,8 +159,15 @@ public class main extends Application {
         Host host = new Host();
 
         try{
-            host.setId(Integer.valueOf(hostParts[0]));
-            host.setInstanceType(hostParts[1]);
+            host.setId(Integer.valueOf(hostParts[0].trim()));
+
+            if (hostParts[1].trim().length() != 2){
+                txtAreaInfo.appendText("Host could not be created, malformed input, Instance Type not readable!\nNext Host will now be processed.\n");
+                host = null;
+            }
+            else
+                host.setInstanceType(hostParts[1]);
+
             host.setSlotCount(Integer.valueOf(hostParts[2]));
 
             if (hostParts.length > host.getSlotCount()+3) {
@@ -176,7 +183,6 @@ public class main extends Application {
                 }
         }catch (Exception e) {
             txtAreaInfo.appendText("Host could not be created, malformed input!\nNext Host will now be processed.\n");
-            e.printStackTrace();
             host = null;
         }finally {
             return host;
