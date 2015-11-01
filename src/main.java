@@ -112,7 +112,7 @@ public class main extends Application {
                                 txtAreaInfo.appendText("Created new instance type: " + hostInstanceType + ", added " + hostInstanceType + " to the instance type collection.\n");
                             }
 
-                            txtAreaInfo.appendText("Added host " + host.getId() + " to instance type" + hostInstanceType + " data structure.\n");
+                            txtAreaInfo.appendText("Added host " + host.getId() + " to instance type " + hostInstanceType + " data structure.\n");
                         }
                         else
                             txtAreaInfo.appendText("Host " + host.getId() + " data corrupt, host has been rejected.\n");
@@ -138,7 +138,6 @@ public class main extends Application {
             e.printStackTrace();
         }
     }
-
 
     private Host createHost(String[] hostParts) {
         Host host = new Host();
@@ -184,24 +183,20 @@ public class main extends Application {
 
     private void processStats(){
         try {
+            String empty = "Empty: ", full = "FULL: ", mstFilled = "MOST FILLED: ";
             PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
-            pw.print("EMPTY: ");
-            for (InstanceType instanceType : fleet.values()) {
-                pw.printf("%s=%s; ", instanceType.getId(), instanceType.getEmpHostCount());
-            }
-            pw.println();
-            pw.print("FULL: ");
-            for (InstanceType instanceType : fleet.values()) {
-                pw.printf("%s=%s; ", instanceType.getId(), instanceType.getFullHostCount());
-            }
-            pw.println();
-            pw.print("MOST FILLED: ");
-            for (InstanceType instanceType : fleet.values()) {
-                pw.printf("%s=%s,%s; ", instanceType.getId(), instanceType.getMstFilledHosts(), instanceType.getFilledHostEmpCount());
-            }
-            pw.println();
 
+            for (InstanceType instanceType : fleet.values()) {
+                empty += String.format("%s=%s; ", instanceType.getId(), instanceType.getEmpHostCount());
+                full += String.format("%s=%s; ", instanceType.getId(), instanceType.getFullHostCount());
+                mstFilled += String.format("%s=%s,%s; ", instanceType.getId(), instanceType.getMstFilledHosts(), instanceType.getFilledHostEmpCount());
+            }
+
+            pw.println(empty);
+            pw.println(full);
+            pw.println(mstFilled);
             pw.close();
+
             lblStatus.setText("Your file has been successfully saved to the desired location.");
         }catch (IOException e) {
             txtAreaInfo.appendText("IO Exception with the output file.");
