@@ -44,13 +44,6 @@ public class InstanceType {
         return id;
     }
 
-    public Host getHost(int id) {
-        if (hosts.containsKey(id))
-            return hosts.get(id);
-        else
-            return null;
-    }
-
     public int getEmpHostCount() {
         return empHostCount;
     }
