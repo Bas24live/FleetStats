@@ -53,13 +53,12 @@ public class InstanceType {
     }
 
     public int getMstFilledHosts() {
-        if (mstFilledHost ==  Integer.MAX_VALUE)
-            return 0;
-
         return mstFilledHost;
     }
 
     public int getFilledHostEmpCount() {
+        if (filledHostEmpCount ==  Integer.MAX_VALUE)
+            return 0;
         return filledHostEmpCount;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
