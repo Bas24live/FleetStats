@@ -3,7 +3,12 @@ public class Host {
     private int  id;
     private String instanceType;
     private int slotCount, numEmpSlots, numFullSlots;
-    private final int empty = 0;
+    private final int empty = 0, full = 1;
+
+    public Host() {
+        numEmpSlots = 0;
+        numFullSlots = 0;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -17,11 +22,16 @@ public class Host {
         this.slotCount = slotCount;
     }
 
-    public void addSlot(int value) {
+    public boolean addSlot(int value) {
+        boolean result = true;
         if (value == empty)
             ++numEmpSlots;
-        else
+        else if(value == full)
             ++numFullSlots;
+        else
+            result = false;
+
+        return result;
     }
 
     public int getId() {

@@ -9,10 +9,11 @@ public class InstanceType {
 
     public InstanceType(String id) {
         hosts = new Hashtable<>();
+        this.id = id;
         empHostCount = 0;
         fullHostCount = 0;
         mstFilledHost = 0;
-        filledHostEmpCount = 0;
+        filledHostEmpCount = Integer.MAX_VALUE;
     }
 
     public void addHost(Host host) {
@@ -28,6 +29,11 @@ public class InstanceType {
             ++empHostCount;
         else if (host.getNumFullSlots() ==  slotCount)
             ++fullHostCount;
+
+        if (host.getNumEmpSlots() > 0 && host.getNumEmpSlots() <= filledHostEmpCount && host.getNumFullSlots() > mstFilledHost){
+            mstFilledHost = host.getNumFullSlots();
+            filledHostEmpCount = host.getNumEmpSlots();
+        }
     }
 
     /////////////////////////////////////////////////////Getters////////////////////////////////////////////////////////
