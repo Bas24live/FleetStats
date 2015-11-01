@@ -1,3 +1,5 @@
+package Task;
+
 import java.util.Hashtable;
 
 public class InstanceType {
@@ -58,6 +60,9 @@ public class InstanceType {
     }
 
     public int getMstFilledHosts() {
+        if (mstFilledHost ==  Integer.MAX_VALUE)
+            return 0;
+
         return mstFilledHost;
     }
 

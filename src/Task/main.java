@@ -1,3 +1,5 @@
+package Task;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +16,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -27,7 +29,7 @@ public class main extends Application {
     private final FileChooser fc  = new FileChooser();
     private File inputFile, outputFile;
 
-    private Hashtable<String, InstanceType> fleet;
+    private ArrayList<InstanceType> fleet;
 
     private final int slotLength = 1;
 
@@ -37,7 +39,7 @@ public class main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("layout.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Layout/layout.fxml"));
         scene = new Scene(root);
         connectToUI(scene);
 
@@ -81,7 +83,7 @@ public class main extends Application {
     }
 
     private void processFile() {
-        fleet = new Hashtable<>();
+        fleet = new ArrayList<>();
         Scanner sc;
         try {
             if (inputFile == null) {
@@ -89,13 +91,14 @@ public class main extends Application {
             } else {
                 sc = new Scanner(inputFile);
                 txtAreaInfo.appendText("Processing: " + inputFile.getName() + "\n");
+
                 while (sc.hasNext()) {
                     String line = sc.nextLine();
                     line.trim();
-                    String component = "";
+                    boolean added = false;
+                    int index = -1;
 
                     if (line != "") {
-
                         String[] hostParts = line.split(",");
                         Host host = createHost(hostParts);
 
@@ -103,22 +106,35 @@ public class main extends Application {
                             String hostInstanceType = host.getInstanceType();
                             txtAreaInfo.appendText("Processed a new host: " + host.getId() + ".\n");
 
-                            if (fleet.containsKey(hostInstanceType))
-                                fleet.get(hostInstanceType).addHost(host);
-                            else {
+                            //check if InstanceType already exists, if so add host to existing object else create a new one and add the host to the new object
+                            if (fleet.size() == 0)
+                                index = 0;
+                            else
+                                for (int i = 0; i < fleet.size(); i++) {
+                                    if (hostInstanceType.equals(fleet.get(i).getId())) {
+                                        added = true;
+                                        fleet.get(i).addHost(host);
+                                        break;
+                                    } else if (hostInstanceType.compareTo(fleet.get(i).getId()) < 0) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                            //If the host was not added, create a new InstanceType object and add the host to the new object
+                            if (!added) {
                                 InstanceType instanceType = new InstanceType(hostInstanceType);
                                 instanceType.addHost(host);
-                                fleet.put(hostInstanceType, instanceType);
+                                if (index != -1)
+                                    fleet.add(index, instanceType);
+                                else
+                                    fleet.add(fleet.size(), instanceType);
                                 txtAreaInfo.appendText("Created new instance type: " + hostInstanceType + ", added " + hostInstanceType + " to the instance type collection.\n");
                             }
-
                             txtAreaInfo.appendText("Added host " + host.getId() + " to instance type " + hostInstanceType + " data structure.\n");
-                        }
-                        else
+                        } else
                             txtAreaInfo.appendText("Host " + host.getId() + " data corrupt, host has been rejected.\n");
                     }
                 }
-
                 lblStatus.setText("File can now saved.");
 
                 btnProcess.setText("Save File");
@@ -133,7 +149,7 @@ public class main extends Application {
             }
             txtAreaInfo.appendText("-----------------------------------------------------------------------------------------------------------------------\n");
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             txtAreaInfo.appendText("IO Exception, file was not found!\n");
             e.printStackTrace();
         }
@@ -153,7 +169,7 @@ public class main extends Application {
             }
             else
                 for (int i = 3; i < hostParts.length; i++) {
-                    if(!host.addSlot(Integer.valueOf(hostParts[i]))){
+                    if(hostParts[i].length() == slotLength && !host.addSlot(Integer.valueOf(hostParts[i]))){
                         txtAreaInfo.appendText("Host could not be created, malformed input, slot value not valid, must be of value 0 or 1!\nNext Host will now be processed.\n");
                         return null;
                     }
@@ -170,13 +186,15 @@ public class main extends Application {
     private void saveFile() {
         fc.setTitle("Save File");
         fc.setInitialFileName("Statistics");
+
         outputFile = fc.showSaveDialog(scene.getWindow());
+
         if(outputFile != null)
             if (fleet.size() >= 1 ) {
                 processStats();
             }
             else
-                txtAreaInfo.appendText("Not data to save, the file was empty or corrupt!\n");
+                txtAreaInfo.appendText("No data to save, the file was empty or corrupt!\n");
         else
             lblStatus.setText("Choose a valid destination to save file!");
     }
@@ -186,7 +204,7 @@ public class main extends Application {
             String empty = "Empty: ", full = "FULL: ", mstFilled = "MOST FILLED: ";
             PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
 
-            for (InstanceType instanceType : fleet.values()) {
+            for (InstanceType instanceType : fleet) {
                 empty += String.format("%s=%s; ", instanceType.getId(), instanceType.getEmpHostCount());
                 full += String.format("%s=%s; ", instanceType.getId(), instanceType.getFullHostCount());
                 mstFilled += String.format("%s=%s,%s; ", instanceType.getId(), instanceType.getMstFilledHosts(), instanceType.getFilledHostEmpCount());
