@@ -2,16 +2,27 @@ public class Host {
 
     private int  id;
     private String instanceType;
-    private int slotCount, emptySlots, fullSlots;
+    private int slotCount, numEmpSlots, numFullSlots;
+    private final int empty = 0;
 
-    public Host(int id, String instanceType, int slotCount, int emptySlots, int fullSlots) {
+    public void setId(int id) {
         this.id = id;
-        this.instanceType = instanceType;
-        this.slotCount = slotCount;
-        this.emptySlots = emptySlots;
-        this.fullSlots = fullSlots;
     }
 
+    public void setInstanceType(String instanceType) {
+        this.instanceType = instanceType;
+    }
+
+    public void setSlotCount(int slotCount) {
+        this.slotCount = slotCount;
+    }
+
+    public void addSlot(int value) {
+        if (value == empty)
+            ++numEmpSlots;
+        else
+            ++numFullSlots;
+    }
 
     public int getId() {
         return id;
@@ -25,11 +36,11 @@ public class Host {
         return slotCount;
     }
 
-    public int getEmptySlots() {
-        return emptySlots;
+    public int getNumEmpSlots() {
+        return numEmpSlots;
     }
 
-    public int getFullSlots() {
-        return fullSlots;
+    public int getNumFullSlots() {
+        return numFullSlots;
     }
 }

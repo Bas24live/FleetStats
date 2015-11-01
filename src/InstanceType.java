@@ -5,16 +5,15 @@ public class InstanceType {
 
     private int empHostCount, fullHostCount;
     private int mstFilledHost, filledHostEmpCount;
+    private String id;
 
-
-    public InstanceType() {
+    public InstanceType(String id) {
         hosts = new Hashtable<>();
         empHostCount = 0;
         fullHostCount = 0;
         mstFilledHost = 0;
         filledHostEmpCount = 0;
     }
-
 
     public void addHost(Host host) {
         hosts.put(host.getId(), host);
@@ -25,13 +24,17 @@ public class InstanceType {
     private void calcHosts(Host host) {
         int slotCount = host.getSlotCount();
 
-        if (host.getEmptySlots() == slotCount)
+        if (host.getNumEmpSlots() == slotCount)
             ++empHostCount;
-        else if (host.getFullSlots() ==  slotCount)
+        else if (host.getNumFullSlots() ==  slotCount)
             ++fullHostCount;
     }
 
     /////////////////////////////////////////////////////Getters////////////////////////////////////////////////////////
+
+    public String getId() {
+        return id;
+    }
 
     public Host getHost(int id) {
         if (hosts.containsKey(id))
