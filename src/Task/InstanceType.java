@@ -32,7 +32,7 @@ public class InstanceType {
         else if (host.getNumFullSlots() ==  slotCount)
             ++fullHostCount;
 
-        if (host.getNumEmpSlots() > 0 && host.getNumEmpSlots() <= filledHostEmpCount && host.getNumFullSlots() > mstFilledHost){
+        if (host.getNumEmpSlots() > 0 && host.getNumEmpSlots() <= filledHostEmpCount && host.getNumFullSlots() >= mstFilledHost){
             mstFilledHost = host.getNumFullSlots();
             filledHostEmpCount = host.getNumEmpSlots();
         }
